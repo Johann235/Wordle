@@ -6,6 +6,11 @@
     background-color: rgba(148, 91, 188, 0.6);
 }
 
+.InputSquare:disabled{
+    opacity: 1;
+    color: white;
+}
+
 .InputSquare:focus{
     outline: none;
 }
