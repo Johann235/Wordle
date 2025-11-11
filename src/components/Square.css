@@ -1,4 +1,4 @@
-.InputSquare{
+input{
     width: 50px;
     height: 50px;
     margin-right: 15px;
@@ -6,11 +6,25 @@
     background-color: rgba(148, 91, 188, 0.6);
 }
 
-.InputSquare:disabled{
+input:disabled{
     opacity: 1;
     color: white;
+    text-align: center;
+    font-size: 30px;
 }
 
-.InputSquare:focus{
+input:focus{
     outline: none;
+}
+
+.Green{
+    background-color: rgba(47, 161, 43,50)
+}
+
+.Grey{
+    background-color: rgba(72, 72, 65, 50);
+}
+
+.Yellow{
+    background-color: rgba(228, 228, 77,25)
 }
