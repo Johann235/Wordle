@@ -5,12 +5,11 @@ import Row from '../components/Row.tsx';
 import './App.css';
 
 function App() {
-
   const numGuesses = 5;
   const wordLength = 5;
   const [rowNumber, setRowNumber] = useState(0);
   const [squareNumber, setSquareNumber] = useState(0);
-  const [values, setValues] = useState([...Array(numGuesses)].map(e => Array(wordLength).fill('')));
+  const [valuesx, setValues] = useState([...Array(numGuesses)].map(e => Array(wordLength).fill('')));
   let rows = [...Array(numGuesses).keys()];
   const [submitted, setSubmitted] =  useState([...Array(numGuesses).fill(false)]);
   const secretWord = "hello";
