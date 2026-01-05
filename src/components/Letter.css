@@ -1,9 +1,8 @@
-.Square input{
-    width: 65px;
-    height: 65px;
+.Letter input{
+    width: 50px;
+    height: 67px;
     margin-right: 5px;
-    border: var(--bg-alt) 5px solid;
-    background-color: var(--bg);
+    border-radius: 10%;
 }
 
 input:disabled{
@@ -17,14 +16,18 @@ input:focus{
     outline: none;
 }
 
-.Square .Green{
+.Letter .Green{
     background-color: var(--green)
 }
 
-.Square .Grey{
-    background-color: var(--grey);
+.Letter  .Grey{
+    background-color: black;
 }
 
-.Square .Yellow{
+.Letter .Yellow{
     background-color: var(--yellow)
+}
+
+.Letter .Black{
+    background-color: var(--grey);
 }

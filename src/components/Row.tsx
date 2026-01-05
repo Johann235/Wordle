@@ -1,28 +1,25 @@
-import Square from "./Square.tsx"
+import Square from "./Square.tsx";
 import './Row.css';
 import { useEffect, useState } from "react";
+import {Guess_Value} from '../pages/App.tsx';
 
 type RowProps = {
-    rowNumber: number,
     guessArray: Array<string>,
     wordLength: number,
     submitted: boolean,
-    secretWord: string
+    secretWord: string,
+    letterStates: {[key: string]: Guess_Value},
+    setLetterStates: Function
 }
 
-export enum Guess_Value{
-    Green,
-    Yellow,
-    Grey
-}
-
-export default function Row({rowNumber, guessArray, wordLength, submitted, secretWord}: RowProps) {
+export default function Row({guessArray, wordLength, submitted, secretWord, letterStates, setLetterStates}: RowProps) {
     let squares = [...Array(wordLength).keys()];
     const [guessStatus, setGeussStatus] = useState([...Array(wordLength).fill(Guess_Value.Grey)])
 
     useEffect(() => {
-        //Count of each letter
-        let letters = {}
+        //Count of each letter in secret word
+        let letters: {[key:string]: number} = {};
+        let new_letterStates = {...letterStates};
         for (let i = 0; i < wordLength; i++) {
             if (!(secretWord[i].toUpperCase() in letters)){
                 letters[secretWord[i].toUpperCase()] = 1;
@@ -32,41 +29,48 @@ export default function Row({rowNumber, guessArray, wordLength, submitted, secre
             }
         }
 
-        //First pass for correct guess
+        //First pass through guessed word to check for correct guess
         let newGuessState = [...Array(5)];
         for (let i = 0; i < wordLength; i++){
             //Correct letter
             if(guessArray[i] == secretWord[i].toUpperCase()){
-                newGuessState[i] = Guess_Value.Green
-                letters[guessArray[i]] -= 1
+                newGuessState[i] = Guess_Value.Green;
+                letters[guessArray[i]] -= 1;
+                new_letterStates[guessArray[i]] = Guess_Value.Green;
             }
         }
 
+        //Second pass to check for yellow and grey
         for (let i = 0; i < wordLength; i++){
-            console.log(newGuessState[i], Guess_Value.Green)
             if(newGuessState[i] == Guess_Value.Green){
-                console.log(i);
                 continue;
             }
             //In the word 
             if ((guessArray[i] in letters ) && (letters[guessArray[i]] > 0)){
                 newGuessState[i] = Guess_Value.Yellow
                 letters[guessArray[i]] -= 1;
+                if (new_letterStates[guessArray[i]] === Guess_Value.Green){
+                    continue;
+                }
+                new_letterStates[guessArray[i]] = Guess_Value.Yellow;
             }
-
             else{
                 newGuessState[i] = Guess_Value.Grey
+                if (new_letterStates[guessArray[i]] === Guess_Value.Green || new_letterStates[guessArray[i]] === Guess_Value.Yellow){
+                    continue;
+                }
+                new_letterStates[guessArray[i]] = Guess_Value.Grey;
             }
         }
         setGeussStatus(newGuessState);
+        setLetterStates(new_letterStates);
     },[submitted])
 
     return (
     <>
         <div className="Row">
             {squares.map((elem) =>
-                <Square rowNumber={rowNumber} squareNumber={elem} 
-                value={guessArray[elem]} submitted={submitted} guessStatus={guessStatus[elem]} key={elem}/>
+                <Square value={guessArray[elem]} submitted={submitted} guessStatus={guessStatus[elem]} key={elem}/>
             )}
         </div>
    

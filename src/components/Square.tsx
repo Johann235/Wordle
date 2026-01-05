@@ -1,16 +1,13 @@
 import './Square.css';
-import {Guess_Value} from './Row.tsx'
-import { useEffect } from 'react';
+import {Guess_Value} from '../pages/App.tsx'
 type SquareProps = {
-    rowNumber: number,
-    squareNumber: number,
     value: string,
     submitted: boolean,
     guessStatus: Guess_Value
 }
 
 
-export default function Square({rowNumber, squareNumber, value, submitted, guessStatus}: SquareProps){
+export default function Square({value, submitted, guessStatus}: SquareProps){
     
     function renderSwitch(guessStatus: Guess_Value) {
         switch(guessStatus) {
@@ -24,12 +21,12 @@ export default function Square({rowNumber, squareNumber, value, submitted, guess
     }
     
     return (
-    <>
+    <div className='Square'>
     {
         submitted ? renderSwitch(guessStatus)
                   : (<input type="text" pattern="[A-Z]*" maxLength={1} value={value} disabled/>)
     }
-    </>
+    </div>
     )
 
 }
