@@ -17,9 +17,10 @@ export default function Row({guessArray, wordLength, submitted, secretWord, lett
     const [guessStatus, setGeussStatus] = useState([...Array(wordLength).fill(Guess_Value.Grey)])
 
     useEffect(() => {
+        let new_letterStates = {...letterStates};
+
         //Count of each letter in secret word
         let letters: {[key:string]: number} = {};
-        let new_letterStates = {...letterStates};
         for (let i = 0; i < wordLength; i++) {
             if (!(secretWord[i].toUpperCase() in letters)){
                 letters[secretWord[i].toUpperCase()] = 1;
@@ -45,7 +46,7 @@ export default function Row({guessArray, wordLength, submitted, secretWord, lett
             if(newGuessState[i] == Guess_Value.Green){
                 continue;
             }
-            //In the word 
+            //In the word (yellow) 
             if ((guessArray[i] in letters ) && (letters[guessArray[i]] > 0)){
                 newGuessState[i] = Guess_Value.Yellow
                 letters[guessArray[i]] -= 1;
@@ -54,6 +55,7 @@ export default function Row({guessArray, wordLength, submitted, secretWord, lett
                 }
                 new_letterStates[guessArray[i]] = Guess_Value.Yellow;
             }
+            //Not in word (grey)
             else{
                 newGuessState[i] = Guess_Value.Grey
                 if (new_letterStates[guessArray[i]] === Guess_Value.Green || new_letterStates[guessArray[i]] === Guess_Value.Yellow){
@@ -62,15 +64,16 @@ export default function Row({guessArray, wordLength, submitted, secretWord, lett
                 new_letterStates[guessArray[i]] = Guess_Value.Grey;
             }
         }
+        console.log(row)
         setGeussStatus(newGuessState);
         setLetterStates(new_letterStates);
     },[submitted])
 
-    return (
+    return(
     <>
         <div className="Row">
             {squares.map((elem) =>
-                <Square value={guessArray[elem]} submitted={submitted} guessStatus={guessStatus[elem]} key={elem}/>
+                <Square index={elem} value={guessArray[elem]} submitted={submitted} guessStatus={guessStatus[elem]} key={elem} />
             )}
         </div>
    

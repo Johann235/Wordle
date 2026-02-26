@@ -18,7 +18,8 @@ function App() {
   const [rowNumber, setRowNumber] = useState(0);
   const [squareNumber, setSquareNumber] = useState(0);
   const [values, setValues] = useState(() => {return [...Array(numGuesses)].map(e => Array(wordLength).fill(''))});
-  
+  const [message, setMessage] = useState( () => {return ""});
+
 
   let rows = [...Array(numGuesses).keys()];
   const [submitted, setSubmitted] =  useState(() => {return [...Array(numGuesses).fill(false)]});
@@ -34,20 +35,22 @@ function App() {
     return initSet;
   }); 
   
-
   function keyDownHandler(e: globalThis.KeyboardEvent) {
     //Try to submit
-    if( (e.key == "Enter") ){
+    if(e.key == "Enter"){
       if (squareNumber < wordLength){
-        console.log("NOT ENOUGH LETTERS");
+        setMessage("Not enough letters");
+        return;
       }
       else{
+        //TODO: check if word is in list
         let newSubmitted = submitted.slice();
         newSubmitted[rowNumber] = true;
         setSubmitted(newSubmitted);
         setRowNumber(rowNumber => rowNumber + 1);
         setSquareNumber(0);
-        console.log(letterStates);
+        setMessage("");
+        return;
       }
     }
 
@@ -59,11 +62,13 @@ function App() {
       newValues[rowNumber] = newRow;
       setValues(newValues);
       setSquareNumber(squareNumber => squareNumber - 1);
+      return;
     }
 
     //Check for valid letter
     else if( !(/^[a-z]$/i.test(e.key))){
       console.log("Invalid input");
+      return;
     }
 
     //Insert
@@ -77,6 +82,26 @@ function App() {
     }
   }
   
+  //Change messages
+  useEffect(() => {
+    const element: HTMLElement|null = document.getElementById("Message");
+
+    function removeStyle(element: HTMLElement){
+      element.className = "msg_hidden";
+      setMessage("");
+    };
+
+    function changeStyle(element: HTMLElement){
+    element.style.width = `${message.length + 2}pc`;
+    element.className = "msg_show"
+    setTimeout(removeStyle,3000,element);
+    };
+
+    if (message != ""){
+    element ? changeStyle(element): null;
+    };
+  }, [message]);
+
   useEffect(() => {
     document.addEventListener("keydown", keyDownHandler);
 
@@ -94,6 +119,11 @@ function App() {
                secretWord={secretWord} key={elem} letterStates={letterStates} setLetterStates={setLetterStates}/>
         )
       }
+      
+    </div>
+
+    <div className='MessageBox'>
+      <input className="msg_hidden" id="Message" value={message} disabled /> 
     </div>
     <Keyboard letterStates={letterStates}></Keyboard>
   </>

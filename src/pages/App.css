@@ -9,3 +9,30 @@ body{
   margin-top: 50px;
 }
 
+.MessageBox{
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.msg_show{
+  opacity: 1; 
+  animation-fill-mode: forwards;
+  animation-name: msg_popup;
+  animation-duration: 3s
+}
+
+.msg_hidden{
+  opacity: 0 !important;
+}
+
+@keyframes msg_popup{
+  0%{
+    opacity: 1;
+  }
+
+  100%{
+    opacity: 0;
+  }
+}
+

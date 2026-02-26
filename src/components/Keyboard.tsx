@@ -11,7 +11,6 @@ export default function Keyboard({letterStates}:KeyboardProps){
     let row_one = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
     let row_two = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
     let row_three = ["Z", "X", "C", "V", "B", "N", "M"];
-    console.log(letterStates);
     return(
     <div className="Keyboard">
         <div className="KeyboardRow">

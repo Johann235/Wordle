@@ -3,6 +3,9 @@
     height: 67px;
     margin-right: 5px;
     border-radius: 10%;
+    animation-fill-mode: forwards;
+    animation-delay: 2s;
+    animation-duration: 0.01s;
 }
 
 input:disabled{
@@ -16,18 +19,25 @@ input:focus{
     outline: none;
 }
 
-.Letter .Green{
-    background-color: var(--green)
+
+@keyframes green_keyboard{
+    100%{
+    background: var(--green);
+    }
 }
 
-.Letter  .Grey{
+@keyframes grey_keyboard{
+    100%{
     background-color: black;
+    }
 }
 
-.Letter .Yellow{
-    background-color: var(--yellow)
+@keyframes yellow_keyboard{
+    100%{
+    background-color: var(--yellow);
+    }
 }
 
-.Letter .Black{
-    background-color: var(--grey);
+.black{
+    background: var(--grey);
 }

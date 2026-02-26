@@ -10,13 +10,14 @@ export default function Letter({letter, guess_value}: LetterProps){
     function renderSwitch(guessStatus: Guess_Value) {
         switch(guessStatus) {
             case Guess_Value.Green:
-                return <input className="Green" type="text" value={letter.toUpperCase()} disabled/>;
+                return <input style={{animationName:"green_keyboard", animationFillMode: "both"}} type="text" value={letter.toUpperCase()} disabled/>;
             case Guess_Value.Grey:
-                return <input className="Grey" type="text" value={letter.toUpperCase()} disabled/>;
+                return <input style={{animationName:"grey_keyboard", animationFillMode: "both"}} type="text" value={letter.toUpperCase()} disabled/>;
             case Guess_Value.Yellow:
-                return <input className="Yellow" type="text" value={letter.toUpperCase()} disabled/>;
+                return <input style={{animationName:"yellow_keyboard", animationFillMode: "both"}} type="text" value={letter.toUpperCase()} disabled/>;
             case Guess_Value.Black:
-                return <input className="Black" type="text" value={letter.toUpperCase()} disabled/>;
+                console.log('hii')
+                return <input className="black" type="text" value={letter.toUpperCase()} disabled/>;
         }
     }
 
