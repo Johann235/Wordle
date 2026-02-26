@@ -3,9 +3,7 @@
     height: 67px;
     margin-right: 5px;
     border-radius: 10%;
-    animation-fill-mode: forwards;
-    animation-delay: 2s;
-    animation-duration: 0.01s;
+    transition: background-color 0.15s 2s;
 }
 
 input:disabled{
@@ -19,25 +17,18 @@ input:focus{
     outline: none;
 }
 
-
-@keyframes green_keyboard{
-    100%{
-    background: var(--green);
-    }
+.Letter input.green{
+    background-color: var(--green);
 }
 
-@keyframes grey_keyboard{
-    100%{
-    background-color: black;
-    }
-}
-
-@keyframes yellow_keyboard{
-    100%{
+.Letter input.yellow{
     background-color: var(--yellow);
-    }
 }
 
-.black{
+.Letter input.grey{
+    background-color: black;
+}
+
+.Letter input.black{
     background: var(--grey);
 }

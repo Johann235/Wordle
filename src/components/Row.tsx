@@ -64,7 +64,7 @@ export default function Row({guessArray, wordLength, submitted, secretWord, lett
                 new_letterStates[guessArray[i]] = Guess_Value.Grey;
             }
         }
-        console.log(row)
+        console.log(newGuessState)
         setGeussStatus(newGuessState);
         setLetterStates(new_letterStates);
     },[submitted])
