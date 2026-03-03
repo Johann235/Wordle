@@ -30,7 +30,7 @@
 
 @keyframes grey{
     50%{
-    background-color: var(--grey);
+    background-color: var(--bg);
     }
     100%{
     background-color: var(--grey)

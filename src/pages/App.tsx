@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Row from '../components/Row.tsx';
 import Keyboard from '../components/Keyboard.tsx'
 import './App.css';
+import fs from 'node:fs';
 
 export enum Guess_Value{
     Green,
@@ -15,6 +16,7 @@ function App() {
   const numGuesses = 6;
   const wordLength = 5;
 
+  const [gameOver, setGameOver] = useState(false);
   const [rowNumber, setRowNumber] = useState(0);
   const [squareNumber, setSquareNumber] = useState(0);
   const [values, setValues] = useState(() => {return [...Array(numGuesses)].map(e => Array(wordLength).fill(''))});
@@ -22,6 +24,7 @@ function App() {
 
 
   let rows = [...Array(numGuesses).keys()];
+  let validWords = new Set();
   const [submitted, setSubmitted] =  useState(() => {return [...Array(numGuesses).fill(false)]});
   const secretWord = "steel";
 
@@ -36,6 +39,9 @@ function App() {
   }); 
   
   function keyDownHandler(e: globalThis.KeyboardEvent) {
+    if(gameOver){
+      return;
+    }
     //Try to submit
     if(e.key == "Enter"){
       if (squareNumber < wordLength){
@@ -50,6 +56,12 @@ function App() {
         setRowNumber(rowNumber => rowNumber + 1);
         setSquareNumber(0);
         setMessage("");
+        localStorage.setItem("rowNum", `${rowNumber + 1}`);
+        if (rowNumber == numGuesses - 1){
+          setMessage("Game over </3");
+          localStorage.setItem("gameOver", "true")
+          setGameOver(true);
+        }
         return;
       }
     }
@@ -65,7 +77,7 @@ function App() {
       return;
     }
 
-    //Check for valid letter
+    //Check for invalid letter
     else if( !(/^[a-z]$/i.test(e.key))){
       console.log("Invalid input");
       return;
@@ -102,20 +114,57 @@ function App() {
     };
   }, [message]);
 
+  //Persisting guesses
+  useEffect(() => {
+    let guesses = localStorage.getItem("guesses");
+    let rowNum = localStorage.getItem("rowNum");
+    let isGameOver = localStorage.getItem("gameOver");
+    gameOver? setGameOver(Boolean(isGameOver)) : null;
+    rowNum? setRowNumber(Number(rowNum)): null;
+    if (guesses){
+      let curGuesses = guesses?.split(",");
+      let newValues: string[][] = [];
+      let newSubmitted: boolean[] = [];
+      for (let i = 0; i < curGuesses.length; i ++){
+        newValues.push(curGuesses[i].split(""))
+        newSubmitted.push(true);
+      };
+      for (let i = curGuesses.length; i < numGuesses; i ++){
+        newValues.push(Array(5).fill(""));
+        newSubmitted.push(false);
+      };
+      localStorage.setItem("guesses", "");
+      setValues(newValues);
+      setSubmitted(newSubmitted)
+    };
+    
+
+    fs.readFile('../words/word_list.txt', 'utf8', (err: unknown, data: string) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log(data);
+    });
+    
+  },[]);
+
+
+  //For keyboard input
   useEffect(() => {
     document.addEventListener("keydown", keyDownHandler);
 
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     }
-  }, [squareNumber, rowNumber, values]);
+  }, [squareNumber, rowNumber, values,gameOver]);
 
   return (
   <>
     <div className="Game"> 
       { 
         rows.map( (elem) =>
-          <Row guessArray={values[elem]} wordLength={wordLength} submitted={submitted[elem]} 
+          <Row guessArray={values[elem]} wordLength={wordLength} submitted={submitted[elem]} setGameOver={setGameOver} 
                secretWord={secretWord} key={elem} letterStates={letterStates} setLetterStates={setLetterStates}/>
         )
       }

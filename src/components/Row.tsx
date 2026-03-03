@@ -10,13 +10,20 @@ type RowProps = {
     secretWord: string,
     letterStates: {[key: string]: Guess_Value},
     setLetterStates: Function
+    setGameOver: Function
 }
 
-export default function Row({guessArray, wordLength, submitted, secretWord, letterStates, setLetterStates}: RowProps) {
+export default function Row({guessArray, wordLength, submitted, secretWord, letterStates, setLetterStates, setGameOver}: RowProps) {
     let squares = [...Array(wordLength).keys()];
     const [guessStatus, setGeussStatus] = useState([...Array(wordLength).fill(Guess_Value.Grey)])
 
     useEffect(() => {
+        //Correct guess
+        if (guessArray.join("") == secretWord.toUpperCase()){
+            setGameOver(true);
+            localStorage.setItem("gameOver", "true")
+        }
+        
         let new_letterStates = {...letterStates};
 
         //Count of each letter in secret word
@@ -64,7 +71,10 @@ export default function Row({guessArray, wordLength, submitted, secretWord, lett
                 new_letterStates[guessArray[i]] = Guess_Value.Grey;
             }
         }
-        console.log(newGuessState)
+        if (guessArray[0] != ""){
+            let currGuesses = localStorage.getItem("guesses");
+            currGuesses ? localStorage.setItem("guesses", currGuesses + "," + guessArray.join("")) : localStorage.setItem("guesses", guessArray.join(""));
+        }
         setGeussStatus(newGuessState);
         setLetterStates(new_letterStates);
     },[submitted])
