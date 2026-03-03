@@ -41,33 +41,34 @@ def countWords(words,file):
             if child.text in hashset:
                 continue
             hashset.add(child.text)
-            print(child.text)
+            #print(child.text)
             word_length = len(child.text)
 
             if(word_length not in lengths):
                 lengths[word_length] = 0
             lengths[word_length] += 1
 
-            file.write(child.text + "\n")
+            file.write(child.text + ",\n")
             file.flush()
     mutex.release()
 
 def addWords(words,file,length):
     mutex.acquire()
-    for word in words:
-        for child in word.children:
+    for word_html in words:
+        for child in word_html.children:
+            word = child.text.upper()
             ##Duplicate word or wrong length
-            if child.text in hashset or len(child.text) != length:
+            if word in hashset or len(word) != length:
                 continue
 
             ##Special char
             pattern = "[^a-zA-Z]"
-            if re.search(pattern,child.text) != None:
+            if re.search(pattern,word) != None:
                 continue
 
-            hashset.add(child.text)
-            print(child.text)
-            file.write(child.text + "\n")
+            hashset.add(word)
+            print(word)
+            file.write("\"" + word + "\",\n")
             file.flush()
     mutex.release()
 
@@ -115,8 +116,5 @@ with ThreadPoolExecutor(max_workers=NUM_THREADS) as executor:
         executor.submit(worker, letters[start:end])
 end = time.time()
 
-f.write(str(len) + "\n")
-f.write(str(end - start))
-f.flush()
-print(str(end-start))
+
 f.close()

@@ -15,7 +15,7 @@ def addWords(words,f):
             if child.text in hashset:
                 continue
             hashset.add(child.text)
-            print(child.text)
+            print(child.text + ",")
             word_length = len(child.text)
 
             if(word_length not in lengths):
